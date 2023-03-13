@@ -15,7 +15,7 @@ final class SearchedDailyTableViewCellModel {
     var maxTemp: Double? = 0
     var minTemp: Double? = 0
     var image: String? = ""
-        
+    
     init(days: String?, maxTemp: Double?, minTemp: Double?, image: String?) {
         self.days = days
         self.maxTemp = maxTemp

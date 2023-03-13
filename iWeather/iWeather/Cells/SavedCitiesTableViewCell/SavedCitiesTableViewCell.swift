@@ -1,33 +1,31 @@
-//
-//  SavedCitiesTableViewCell.swift
-//  iWeather
-//
-//  Created by Rstam Ganizoda on 28/02/2023.
-//
 import RxSwift
 import RxCocoa
 import UIKit
 
+//MARK: - extension
+private extension CGFloat {
+    static let cornerRadius = CGFloat(20)
+}
+
 class SavedCitiesTableViewCell: UITableViewCell {
     
+    //MARK: - IBOutlets
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var currentTemp: UILabel!
     @IBOutlet weak var cloudsStatusLabel: UILabel!
     @IBOutlet weak var currentTimeLabel: UILabel!
     @IBOutlet weak var weatherConditionImageView: UIImageView!
     
+    //MARK: - let/var
     let viewModel = SavedCitiesTableViewCellModel(city: "")
     static let identifier = "SavedCitiesTableViewCell"
     let disposeBag = DisposeBag()
     
-   
-    
+    //MARK: - Functionality
     override func awakeFromNib() {
         super.awakeFromNib()
-        weatherConditionImageView.layer.cornerRadius = 20
+        weatherConditionImageView.layer.cornerRadius = .cornerRadius
     }
-    
-    
     
     func configureFavoriteCity(_ model: SavedCitiesTableViewCellModel, _ index: Int) {
         viewModel.fetchWeather()

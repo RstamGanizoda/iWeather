@@ -5,7 +5,7 @@ import CoreLocation
 
 final class SearchCityViewModel {
     
-    // MARK: let/var
+    // MARK: - let/var
     let disposeBag = DisposeBag()
     let geocoder = CLGeocoder()
     let dataSource = DataSource.shared
@@ -17,26 +17,11 @@ final class SearchCityViewModel {
     let alertRelay = PublishRelay<UIAlertController>()
     let dataSourceForFavorite = BehaviorRelay<[SavedCitiesTableViewCellModel]>(value: [])
     
-    let deleteItem = PublishRelay<Int>()
-    
     init(city: String?){
         self.city = city
     }
     
-    func deleteRow(at index: Int){
-        var currentDataSource = dataSourceForFavorite.value
-            currentDataSource.remove(at: index)
-            dataSourceForFavorite.accept(currentDataSource)
-//        var allCities = AllCities.shared.cityArray
-//        allCities?.remove(at: index)
-    }
-    
-    func removeCity(at index: Int) {
-        guard var cityArray = StorageManager.shared.getCity() else { return }
-        cityArray.remove(at: index)
-        UserDefaults.standard.set(cityArray, forKey: "cityKey")
-    }
-    // MARK: Navigation
+    // MARK: - Navigation
     func dataSourceTable() {
         if let allSavedCities = StorageManager.shared.getCity() {
             let sortedData = allSavedCities.map {
@@ -56,7 +41,7 @@ final class SearchCityViewModel {
         }.disposed(by: disposeBag)
     }
     
-    // MARK: Functionality
+    // MARK: - Functionality
     func getLocation() {
         typedCityText
             .subscribe { cityText in
@@ -64,7 +49,7 @@ final class SearchCityViewModel {
             }.disposed(by: disposeBag)
     }
     
-    func checkTextField(){
+    func checkTextField() {
         if city == nil || city == "" {
             self.createAlert()
         } else {

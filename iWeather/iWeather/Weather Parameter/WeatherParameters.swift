@@ -1,8 +1,9 @@
-
 import Foundation
+
+//MARK: - classes
 class WeatherParameters {
     
-    //MARK: let/var
+    //MARK: - let/var
     var date: String?
     var temp: Double?
     var windSpeed: Double?

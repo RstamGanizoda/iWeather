@@ -1,14 +1,9 @@
-//
-//  Cities.swift
-//  iWeather
-//
-//  Created by Rstam Ganizoda on 28/02/2023.
-//
-
 import Foundation
 
-class AllCities: Codable {
+//MARK: - class
+final class AllCities: Codable {
     
+    //MARK: - let/var
     static let shared = AllCities()
     var cityArray: [City]?
     
@@ -17,8 +12,10 @@ class AllCities: Codable {
     }
 }
 
-class City: Codable, Equatable {
+//MARK: - class
+final class City: Codable, Equatable {
     
+    //MARK: - let/var
     static func == (lhs: City, rhs: City) -> Bool {
         return lhs.city == rhs.city
     }

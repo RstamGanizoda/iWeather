@@ -23,7 +23,7 @@ class SearchedDailyTableViewCell: UITableViewCell {
         minTemp: 0,
         image: ""
     )
-
+    
     //MARK: Functionality
     func configureDailyForecast(_ model: SearchedDailyTableViewCellModel, _ index: Int) {
         if index == 0 {

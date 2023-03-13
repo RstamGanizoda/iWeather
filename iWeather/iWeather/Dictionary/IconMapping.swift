@@ -1,8 +1,9 @@
 import UIKit
 
+//MARK: - class
 class IconMapping {
     
-    //MARK: let/var
+    //MARK: - let/var
     static let mappingForBackground: [String: UIImage] = ["01d": UIImage(named: "clearDay")!,
                                                           "02d": UIImage(named: "partlyCloudyDay")!,
                                                           "03d": UIImage(named: "cloudyDay")!,

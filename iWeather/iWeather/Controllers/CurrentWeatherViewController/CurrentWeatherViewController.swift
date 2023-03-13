@@ -1,10 +1,9 @@
-
 import UIKit
 import CoreLocation
 import RxCocoa
 import RxSwift
 
-//MARK: extension
+//MARK: - extension
 private extension CGFloat {
     static let space = 10.0
     static let cornerRadius = CGFloat(20)
@@ -12,11 +11,12 @@ private extension CGFloat {
     static let heightForHeader = CGFloat(30)
     static let alphaForBackground = CGFloat(0.15)
     static let alphaForHeader = CGFloat(0.95)
+    static let widthOfCollections = CGFloat(60)
 }
 
 class CurrentWeatherViewController: UIViewController, CLLocationManagerDelegate {
     
-    // MARK: IBOutlets
+    // MARK: - IBOutlets
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var currentTempLabel: UILabel!
     @IBOutlet weak var backgroundImageView: UIImageView!
@@ -30,15 +30,14 @@ class CurrentWeatherViewController: UIViewController, CLLocationManagerDelegate 
     @IBOutlet weak var hourlyCollectionView: UICollectionView!
     @IBOutlet weak var dailyTableView: UITableView!
     
-    // MARK: let/var
+    // MARK: - let/var
     let viewModel = CurrentWeatherViewModel()
     let locationManager = CLLocationManager()
     var weatherData = Weather()
     let getAllWeather = WeatherManager.shared
     let disposeBag = DisposeBag()
-    let widthOfCollections = CGFloat(60)
     
-    // MARK: Life cycle
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         addIcons()
@@ -58,22 +57,21 @@ class CurrentWeatherViewController: UIViewController, CLLocationManagerDelegate 
         locationManager.delegate = self
         locationManager.requestAlwaysAuthorization()
         locationManager.startUpdatingLocation()
-        
     }
     
-    //MARK: IBAction
+    //MARK: - IBAction
     @IBAction func searchButtonPressed(_ sender: UIButton) {
         viewModel.searchButtonPressed.accept(true)
     }
     
-    //MARK: Navigation
+    //MARK: - Navigation
     private func moveToSearchController() {
         viewModel.searchViewController.subscribe { event in
             self.navigationController?.pushViewController(event, animated: true)
         }.disposed(by: disposeBag)
     }
     
-    // MARK: UI
+    // MARK: - UI
     private func addIcons(){
         let windIcon = UIImage(named: "windIcon")
         let humidityIcon = UIImage(named: "humidityIcon")
@@ -88,7 +86,7 @@ class CurrentWeatherViewController: UIViewController, CLLocationManagerDelegate 
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.itemSize = CGSize(
-            width: self.widthOfCollections,
+            width: .widthOfCollections,
             height: self.hourlyCollectionView.frame.height - .space * 2
         )
         hourlyCollectionView.layer.cornerRadius = .cornerRadius
@@ -112,7 +110,7 @@ class CurrentWeatherViewController: UIViewController, CLLocationManagerDelegate 
         }
     }
     
-    // MARK: Functionality
+    // MARK: - Functionality
     private func bindCurrentWeather() {
         viewModel.fetchWeather()
         viewModel.currentTemp.subscribe { currentTemp in
@@ -171,7 +169,7 @@ class CurrentWeatherViewController: UIViewController, CLLocationManagerDelegate 
     }
 }
 
-//MARK: extensions
+//MARK: - extensions
 extension CurrentWeatherViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return .heightOfRows

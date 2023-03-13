@@ -1,9 +1,3 @@
-//
-//  SavedCitiesTableViewCellModel.swift
-//  iWeather
-//
-//  Created by Rstam Ganizoda on 28/02/2023.
-//
 import CoreLocation
 import Foundation
 import RxSwift
@@ -11,6 +5,7 @@ import RxCocoa
 
 final class SavedCitiesTableViewCellModel {
     
+    //MARK: - let/var
     let getAllWeather = WeatherManager.shared
     let dataSource = BehaviorRelay<[City]>(value: [])
     var weatherData = Weather()
@@ -19,26 +14,17 @@ final class SavedCitiesTableViewCellModel {
     let backgroundImage = BehaviorRelay<UIImage?>(value: nil)
     let cloudsStatus = BehaviorRelay<String?>(value: "")
     let currentTime = BehaviorRelay<String?>(value: "")
-
-
-
     let disposeBag = DisposeBag()
-
     var allFavoriteCities = StorageManager.shared.getCity()
-   
     var city: String? = ""
     
-        
     init(city: String?) {
         self.city = city
     }
-        
-        
     
-    
+    //MARK: - Functionality
     func fetchWeather() {
         cityRelay.subscribe { city in
-            
             self.getLocationForCity(cityName: city ?? "Berlin") { coordinates, error
                 in
                 if let coordinates = coordinates {
@@ -61,31 +47,27 @@ final class SavedCitiesTableViewCellModel {
                         if let time = currentWeather?.date{
                             self.currentTime.accept("\(time)")
                         }
-                        
                     }
                 }
             }
             
         }.disposed(by: disposeBag)
-        
-        
-        
-        
     }
-
-
-    func getLocationForCity(cityName: String, completion: @escaping (CLLocationCoordinate2D?, Error?) -> Void) {
+    
+    func getLocationForCity(
+        cityName: String,
+        completion: @escaping (CLLocationCoordinate2D?, Error?) -> Void
+    ) {
         let geocoder = CLGeocoder()
         geocoder.geocodeAddressString(cityName) { placemarks, error in
             if let error = error {
                 completion(nil, error)
-            } else if let placemark = placemarks?.first, let location = placemark.location {
+            } else if let placemark = placemarks?.first,
+                      let location = placemark.location {
                 completion(location.coordinate, nil)
             } else {
                 completion(nil, nil)
             }
         }
     }
-    
-    
 }

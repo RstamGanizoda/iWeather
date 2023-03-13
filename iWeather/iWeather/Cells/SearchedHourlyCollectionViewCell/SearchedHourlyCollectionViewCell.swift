@@ -1,20 +1,13 @@
-//
-//  CollectionViewCell.swift
-//  iWeather
-//
-//  Created by Rstam Ganizoda on 27/02/2023.
-//
-
 import UIKit
 
 class SearchedHourlyCollectionViewCell: UICollectionViewCell {
     
-    //MARK: IBOutlets
+    //MARK: - IBOutlets
     @IBOutlet weak var hoursLabel: UILabel!
     @IBOutlet weak var weatherConditionsImageView: UIImageView!
     @IBOutlet weak var tempByHoursLabel: UILabel!
     
-    //MARK: let/var
+    //MARK: - let/var
     static let identifier = "SearchedHourlyCollectionViewCell"
     let viewModel = SearchedHourlyCollectionViewCellModel(
         hours: "",
@@ -22,7 +15,7 @@ class SearchedHourlyCollectionViewCell: UICollectionViewCell {
         image: ""
     )
     
-    //MARK: Functionality
+    //MARK: - Functionality
     func configureForecast(_ model: SearchedHourlyCollectionViewCellModel, _ index: Int) {
         if index == 0 {
             self.hoursLabel.text = "Now"

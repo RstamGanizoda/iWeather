@@ -1,21 +1,25 @@
 import Foundation
 import Alamofire
 
+//MARK: - extension
+private extension String {
+    static let baseURL = "https://api.openweathermap.org/data/3.0/onecall?"
+    static let latitudeURL = "lat="
+    static let longtitudeURL = "&lon="
+    static let extraKeyApi = "&appid=f7de4cef632bf95e15574a571348a79d"
+    static let keyApi = "&appid=efc102590e9138889b4c5376d0730c86"
+    static let units = "&units=metric"
+    static let defaultTimezone = "America/Los_Angeles"
+}
+
+//MARK: - class
 class WeatherManager {
     
-    //MARK: let/var
+    //MARK: - let/var
     static let shared = WeatherManager()
-    private init(){}
+    private let weatherData = Weather()
     
-    private let baseURL = "https://api.openweathermap.org/data/3.0/onecall?"
-    private let latitudeURL = "lat="
-    private let longtitudeURL = "&lon="
-    private let extraKey = "&appid=f7de4cef632bf95e15574a571348a79d"
-    private let keyApi = "&appid=efc102590e9138889b4c5376d0730c86"
-
-    private let units = "&units=metric"
-    private let defaultTimezone = "America/Los_Angeles"
-    let weatherData = Weather()
+    private init(){}
     
     //MARK: Functionality
     func getWeather(
@@ -23,7 +27,7 @@ class WeatherManager {
         longtitude: String,
         completion: @escaping (Weather) -> ()
     ) {
-        let urlString = baseURL + latitudeURL + latittude + longtitudeURL + longtitude + keyApi + units
+        let urlString = .baseURL + .latitudeURL + latittude + .longtitudeURL + longtitude + .keyApi + .units
         AF.request(urlString).response { response in
             guard let data = response.data,
                   let JSONSerialization = try? JSONSerialization.jsonObject(with: data) else { return }
@@ -32,7 +36,6 @@ class WeatherManager {
                 let currentWeather = WeatherParameters()
                 var hourlyWeather = [WeatherParameters]()
                 var dailyWeather = [WeatherParameters]()
-                // current weather
                 if let timezone = json["timezone"] as? String {
                     self.weatherData.timezone = timezone
                 }
@@ -43,7 +46,7 @@ class WeatherManager {
                     if let time = current["dt"] as? Double {
                         let formatter = DateFormatter()
                         formatter.dateFormat = "HH:mm"
-                        formatter.timeZone = TimeZone(identifier: self.weatherData.timezone ?? self.defaultTimezone)
+                        formatter.timeZone = TimeZone(identifier: self.weatherData.timezone ?? .defaultTimezone)
                         currentWeather.date = formatter.string(from: Date(timeIntervalSince1970: time))
                     }
                     if let temp = current["temp"] as? Double {
@@ -76,14 +79,13 @@ class WeatherManager {
                     }
                     self.weatherData.currentWeather = currentWeather
                     
-                    //hourly forecast
                     if let hourly = json["hourly"] as? [[String: Any]] {
                         for i in 0...23 {
                             let weatherForHour = WeatherParameters()
                             if let date = hourly[i]["dt"] as? Double {
                                 let formatter = DateFormatter()
                                 formatter.dateFormat = "HH"
-                                formatter.timeZone = TimeZone(identifier: self.weatherData.timezone ?? self.defaultTimezone)
+                                formatter.timeZone = TimeZone(identifier: self.weatherData.timezone ?? .defaultTimezone)
                                 weatherForHour.date = formatter.string(from: Date(timeIntervalSince1970: date))
                             }
                             if let temp = hourly[i]["temp"] as? Double {
@@ -98,14 +100,13 @@ class WeatherManager {
                     }
                     self.weatherData.hourlyForecast = hourlyWeather
                     
-                    //daily forecast   
                     if let daily = json["daily"] as? [[String: Any]] {
                         for day in daily {
                             let weatherForDay = WeatherParameters()
                             if let date = day["dt"] as? Double {
                                 let formatter = DateFormatter()
                                 formatter.dateFormat = "EEEE"
-                                formatter.timeZone = TimeZone(identifier: self.weatherData.timezone ?? self.defaultTimezone)
+                                formatter.timeZone = TimeZone(identifier: self.weatherData.timezone ?? .defaultTimezone)
                                 weatherForDay.date = formatter.string(from: Date(timeIntervalSince1970: date))
                             }
                             if let temp = day["temp"] as? [String: Any] {
@@ -130,4 +131,4 @@ class WeatherManager {
         }
     }
 }
-        
+

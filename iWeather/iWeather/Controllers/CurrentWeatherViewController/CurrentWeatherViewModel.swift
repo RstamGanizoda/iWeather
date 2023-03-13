@@ -3,13 +3,17 @@ import CoreLocation
 import RxCocoa
 import RxSwift
 
+//MARK: - extension
+private extension Double {
+    static let defaultLatitude = 37.3172
+    static let defaultLongtitude = -122.0385
+}
+
 final class CurrentWeatherViewModel {
     
-    // MARK: let/var
+    // MARK: - let/var
     let geocoder = CLGeocoder()
     let locationManager = CLLocationManager()
-    let defaultLatitude = 37.3172
-    let defaultLongtitude = -122.0385
     let searchCityViewContoller = "SearchCityViewController"
     let getAllWeather = WeatherManager.shared
     var weatherData = Weather()
@@ -21,14 +25,12 @@ final class CurrentWeatherViewModel {
     let humidity = BehaviorRelay<String?>(value: "")
     let pressure = BehaviorRelay<String?>(value: "")
     let backgroundImage = BehaviorRelay<UIImage?>(value: nil)
-    
     let dataSourceDailyForecast = BehaviorRelay<[DailyTableViewCellModel]>(value: [])
     let dataSourceHourlyForecast = BehaviorRelay<[HourlyCollectionViewCellModel]>(value: [])
-    
     let searchButtonPressed = PublishRelay<Bool>()
     let searchViewController = PublishRelay<UIViewController>()
     
-    //MARK: Navigation
+    //MARK: - Navigation
     func configureSearchButton() {
         searchButtonPressed.subscribe { event in
             self.searchViewController.accept(self.createSearchController())
@@ -43,7 +45,7 @@ final class CurrentWeatherViewModel {
         return controller
     }
     
-    // MARK: Functionality
+    // MARK: - Functionality
     func fetchWeather(){
         let latitude = getCurrentLocation().coordinate.latitude
         let longtitude = getCurrentLocation().coordinate.longitude
@@ -108,8 +110,8 @@ final class CurrentWeatherViewModel {
     
     func getCurrentLocation() -> CLLocation {
         let defaultCoordinates = CLLocation(
-            latitude: self.defaultLatitude,
-            longitude: self.defaultLongtitude
+            latitude: .defaultLatitude,
+            longitude: .defaultLongtitude
         )
         guard let latitude = locationManager.location?.coordinate.latitude,
               let longtitude = locationManager.location?.coordinate.longitude else { return defaultCoordinates }

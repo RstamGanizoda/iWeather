@@ -3,6 +3,11 @@ import RxCocoa
 import RxSwift
 import CoreLocation
 
+//MARK: - extension
+private extension Double {
+    static let defaultLatitude = 37.3172
+    static let defaultLongtitude = -122.0385
+}
 
 final class SelectedCityViewModel {
     
@@ -13,10 +18,7 @@ final class SelectedCityViewModel {
     let getAllWeather = WeatherManager.shared
     let storageManager = StorageManager.shared
     var weatherData = Weather()
-    let defaultLatitude = 37.3172
-    let defaultLongtitude = -122.0385
     var allFavoriteCities = AllCities.shared.cityArray
-    
     let cityName = BehaviorRelay<String?>(value: "")
     let currentTemp = BehaviorRelay<String?>(value: "")
     let cloudsStatus = BehaviorRelay<String?>(value: "")
@@ -30,7 +32,7 @@ final class SelectedCityViewModel {
     let dataSourceHourlyForecast = BehaviorRelay<[SearchedHourlyCollectionViewCellModel]>(value: [])
     let addButtonPressed = PublishRelay<Bool>()
     
-    // MARK: Functionality
+    // MARK: - Functionality
     func addFavoriteCity() {
         addButtonPressed.subscribe { event in
             self.cityName.subscribe { city in
@@ -47,8 +49,8 @@ final class SelectedCityViewModel {
             let latitude = location?.coordinate.latitude
             let longtitude = location?.coordinate.longitude
             self.getAllWeather.getWeather(
-                latittude: String(latitude ?? self.defaultLatitude),
-                longtitude: String(longtitude ?? self.defaultLongtitude)
+                latittude: String(latitude ?? .defaultLatitude),
+                longtitude: String(longtitude ?? .defaultLongtitude)
             ) { weather in
                 self.weatherData = weather
                 let currentWeather = self.weatherData.currentWeather
@@ -100,7 +102,10 @@ final class SelectedCityViewModel {
             let cityLocation = location
             self.locationRelay.accept(cityLocation)
             self.geocoder.reverseGeocodeLocation(cityLocation ??
-                                                 CLLocation(latitude: self.defaultLatitude, longitude: self.defaultLongtitude)
+                                                 CLLocation(
+                                                    latitude: .defaultLatitude,
+                                                    longitude: .defaultLongtitude
+                                                 )
             ) { placemark, _ in
                 if let city = placemark?.first?.locality {
                     self.cityName.accept(city)

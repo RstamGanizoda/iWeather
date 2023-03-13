@@ -1,20 +1,14 @@
-//
-//  DailyTableViewCellModel.swift
-//  iWeather
-//
-//  Created by Rstam Ganizoda on 25/02/2023.
-//
 import UIKit
 import Foundation
 
 final class DailyTableViewCellModel {
     
-    //MARK: let/var
+    //MARK: - let/var
     var days: String? = ""
     var maxTemp: Double? = 0
     var minTemp: Double? = 0
     var image: String? = ""
-        
+    
     init(days: String?, maxTemp: Double?, minTemp: Double?, image: String?) {
         self.days = days
         self.maxTemp = maxTemp
@@ -22,7 +16,7 @@ final class DailyTableViewCellModel {
         self.image = image
     }
     
-    //MARK: Functionality
+    //MARK: - Functionality
     var dayTemp: String? {
         let roundedTemp = Int(round(maxTemp ?? 0))
         return "Day: \(roundedTemp)˚"
@@ -38,3 +32,4 @@ final class DailyTableViewCellModel {
         return selectedImage[image ?? ""]
     }
 }
+

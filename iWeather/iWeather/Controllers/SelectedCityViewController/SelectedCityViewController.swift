@@ -1,15 +1,9 @@
-//
-//  SelectedCityViewController.swift
-//  iWeather
-//
-//  Created by Rstam Ganizoda on 26/02/2023.
-//
-
 import UIKit
 import CoreLocation
 import RxCocoa
 import RxSwift
 
+// MARK: - Extension
 private extension CGFloat {
     static let space = 10.0
     static let cornerRadius = CGFloat(20)
@@ -21,8 +15,8 @@ private extension CGFloat {
 }
 
 class SelectedCityViewController: UIViewController {
-
-    // MARK: IBOutlets
+    
+    // MARK: - IBOutlets
     @IBOutlet weak var cityLabel: UILabel!
     @IBOutlet weak var currentTempLabel: UILabel!
     @IBOutlet weak var backgroundImageView: UIImageView!
@@ -38,11 +32,11 @@ class SelectedCityViewController: UIViewController {
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var addButton: UIButton!
     
-    // MARK: let/var
+    // MARK: - let/var
     let viewModel = SelectedCityViewModel()
     let disposeBag = DisposeBag()
-
-    // MARK: Life cycle
+    
+    // MARK: - Life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         viewModel.addFavoriteCity()
@@ -54,18 +48,22 @@ class SelectedCityViewController: UIViewController {
         configureHourlyForecast()
     }
     
-    //MARK: IBAction
+    //MARK: - IBAction
     @IBAction func addButtonPressed(_ sender: UIButton) {
         viewModel.addButtonPressed.accept(true)
-        self.dismiss(animated: true)
-
+        moveToPreviousVC()
     }
     
     @IBAction func backButtonPressed(_ sender: UIButton) {
+        moveToPreviousVC()
+    }
+    
+    // MARK: - Navigation
+    private func moveToPreviousVC() {
         self.dismiss(animated: true)
     }
     
-    // MARK: UI
+    // MARK: - UI
     private func addIcons(){
         let windIcon = UIImage(named: "windIcon")
         let humidityIcon = UIImage(named: "humidityIcon")
@@ -159,9 +157,8 @@ class SelectedCityViewController: UIViewController {
     }
 }
 
-//MARK: extensions
+//MARK: - extensions
 extension SelectedCityViewController: UITableViewDelegate {
-    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return .heightOfRows
     }

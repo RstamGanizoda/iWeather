@@ -1,16 +1,14 @@
-
-
 import UIKit
 
 class DailyTableViewCell: UITableViewCell {
     
-    //MARK: IBOutlets
+    //MARK: - IBOutlets
     @IBOutlet weak var dayLabel: UILabel!
     @IBOutlet weak var weatherConditionImageView: UIImageView!
     @IBOutlet weak var minTempLabel: UILabel!
     @IBOutlet weak var maxTempLabel: UILabel!
     
-    //MARK: let/var
+    //MARK: - let/var
     static let identifier = "DailyTableViewCell"
     let viewModel = DailyTableViewCellModel(
         days: "",
@@ -18,7 +16,7 @@ class DailyTableViewCell: UITableViewCell {
         minTemp: 0,
         image: ""
     )
-    //MARK: Functionality
+    //MARK: - Functionality
     func configureDailyForecast(_ model: DailyTableViewCellModel, _ index: Int) {
         if index == 0 {
             self.dayLabel.text = "Today"

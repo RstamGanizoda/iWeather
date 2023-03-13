@@ -1,29 +1,32 @@
 import Foundation
 
+//MARK: - extension
 private extension String {
-    
     static let cityKey = "cityKey"
 }
 
+//MARK: - class
 class StorageManager {
     
+    //MARK: - let/var
     static let shared = StorageManager()
     private init() {}
     
-    // Save and load cities
+    //MARK: - functionality
     func saveCity(array: [City]?) {
         guard var allCities = getCity() else {
             UserDefaults.standard.set(encodable: array, forKey: .cityKey)
             return
         }
         if let newCities = array {
-                for city in newCities {
-                    if !allCities.contains(city) {
-                        allCities.append(city)
-                    }
+            for city in newCities {
+                if !allCities.contains(city) {
+                    allCities.append(city)
                 }
             }
-            UserDefaults.standard.set(encodable: allCities, forKey: .cityKey)
+        }
+        UserDefaults.standard.set(encodable: allCities, forKey: .cityKey)
+        
     }
     
     func getCity() -> [City]? {
@@ -32,9 +35,8 @@ class StorageManager {
     }
 }
 
-// MARK: Extension UserDefaults
+// MARK: - Extension
 extension UserDefaults {
-    
     func set<T: Encodable>(encodable: T, forKey key: String) {
         if let data = try? JSONEncoder().encode(encodable) {
             set(data, forKey: key)

@@ -1,22 +1,15 @@
-//
-//  HourlyCollectionViewCell.swift
-//  iWeather
-//
-//  Created by Rstam Ganizoda on 22/01/2023.
-//
-
 import UIKit
 import RxSwift
 import RxCocoa
 
 class HourlyCollectionViewCell: UICollectionViewCell {
     
-    //MARK: IBOutlets
+    //MARK: - IBOutlets
     @IBOutlet weak var hoursLabel: UILabel!
     @IBOutlet weak var weatherImageView: UIImageView!
     @IBOutlet weak var tempByHours: UILabel!
     
-    //MARK: let/var
+    //MARK: - let/var
     static let identifier = "HourlyCollectionViewCell"
     let viewModel = HourlyCollectionViewCellModel(
         hours: "",
@@ -24,7 +17,7 @@ class HourlyCollectionViewCell: UICollectionViewCell {
         image: ""
     )
     
-    //MARK: Functionality
+    //MARK: - Functionality
     func configureForecast(_ model: HourlyCollectionViewCellModel, _ index: Int) {
         if index == 0 {
             self.hoursLabel.text = "Now"

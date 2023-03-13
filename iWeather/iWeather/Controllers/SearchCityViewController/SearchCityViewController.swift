@@ -1,8 +1,8 @@
-
 import RxCocoa
 import RxSwift
 import UIKit
 
+//MARK: - extensions
 private extension CGFloat {
     static let space = 10.0
     static let cornerRadiusForInput = CGFloat(15)
@@ -17,19 +17,19 @@ private extension UIColor {
 }
 
 class SearchCityViewController: UIViewController {
-
-    //MARK: IBOutlet
+    
+    //MARK: - IBOutlet
     @IBOutlet weak var searchCityTextField: UITextField!
     @IBOutlet weak var searchButton: UIButton!
     @IBOutlet weak var savedCitiesTableView: UITableView!
     @IBOutlet weak var backButton: UIButton!
     
-    //MARK: let/var
+    //MARK: - let/var
     let disposeBag = DisposeBag()
     let viewModel = SearchCityViewModel(city: nil)
     let textFieldPlaceholder = "🔍 Search for a city"
-
-    //MARK: life cycle
+    
+    //MARK: - life cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         registerNib()
@@ -41,38 +41,20 @@ class SearchCityViewController: UIViewController {
         configureCurrentWeather()
         viewModel.dataSourceTable()
         moveToSelectedViewController()
-        viewModel.deleteItem.subscribe { index in
-            self.viewModel.deleteRow(at: index)
-        }.disposed(by: disposeBag)
-        
-        
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-    }
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-    }
-
-    //MARK: IBAction
+    //MARK: - IBAction
     @IBAction func searchButtonPressed(_ sender: UIButton) {
         self.viewModel.checkTextField()
         self.viewModel.searchButtonPressed.accept(true)
     }
     
     @IBAction func backButtonPressed(_ sender: UIButton) {
-        self.navigationController?.popViewController(animated: true)
+        moveToPreviousVC()
     }
-
     
-    //MARK: Navigation
+    
+    //MARK: - Navigation
     private func moveToSelectedViewController() {
         viewModel.configureSearchButton()
         viewModel.selectedCityViewController.subscribe { event in
@@ -80,12 +62,17 @@ class SearchCityViewController: UIViewController {
         }.disposed(by: disposeBag )
     }
     
-    //MARK: UI
+    private func moveToPreviousVC() {
+        self.navigationController?.popViewController(animated: true)
+    }
+    
+    //MARK: - UI
     private func addAllUI(){
         modifyButtons()
         modifyTableView()
         modifySearchTextField()
     }
+    
     private func modifySearchTextField() {
         let placeholderText = NSAttributedString(
             string: self.textFieldPlaceholder,
@@ -97,7 +84,7 @@ class SearchCityViewController: UIViewController {
         searchCityTextField.clearButtonMode = .always
         searchCityTextField.clearsOnBeginEditing = true
         searchCityTextField.autocapitalizationType = .words
-    
+        
         searchCityTextField.layer.cornerRadius = .cornerRadiusForInput
         searchCityTextField.layer.borderWidth = .borderWidth
         searchCityTextField.layer.borderColor = UIColor.borderColorForInput
@@ -127,7 +114,7 @@ class SearchCityViewController: UIViewController {
         backButton.layer.cornerRadius = .cornerRadiusForInput
     }
     
-    //MARK: Functionality
+    //MARK: - Functionality
     private func createAlert() {
         viewModel.alertRelay.subscribe { event in
             self.present(event, animated: true)
@@ -147,7 +134,10 @@ class SearchCityViewController: UIViewController {
     }
     
     private func registerNib(){
-        self.savedCitiesTableView.register(UINib(nibName: "SavedCitiesTableViewCell", bundle: nil), forCellReuseIdentifier: "SavedCitiesTableViewCell")
+        self.savedCitiesTableView.register(
+            UINib(nibName: "SavedCitiesTableViewCell", bundle: nil),
+            forCellReuseIdentifier: "SavedCitiesTableViewCell"
+        )
     }
     
     private func getTypedText() {
@@ -175,17 +165,11 @@ class SearchCityViewController: UIViewController {
         ) { index, model, cell in
             cell.configureFavoriteCity(model, index)
         }.disposed(by: disposeBag)
-        
-        savedCitiesTableView.rx.itemDeleted.subscribe { [weak self] event in
-            if let indexPath = event.element {
-                self?.viewModel.deleteItem.accept(indexPath.row)
-            }
-        }.disposed(by: disposeBag)
-        
         self.savedCitiesTableView.delegate = self
     }
 }
-//MARK: extensions
+
+//MARK: - extensions
 extension SearchCityViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return .rowHeigh
